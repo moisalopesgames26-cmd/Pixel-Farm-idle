@@ -1,0 +1,23 @@
+name: Gerar APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Extrair arquivos
+        run: unzip -o *.zip || true
+
+      - name: Gerar APK com Buildozer
+        uses: ArtemShat/buildozer-action@v1.2
+        with:
+          command: buildozer -v android debug
+          repository_root: .
+
+      - name: Baixar APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: meu-jogo-apk
+          path: bin/*.apk
